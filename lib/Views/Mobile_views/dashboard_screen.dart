@@ -7,7 +7,9 @@ import 'package:metro_pat_customer/Views/Mobile_views/FRAAsbestosManagementSurve
 import 'package:metro_pat_customer/Views/Mobile_views/FireRiskAssessments/fire_risk_assessments.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/FireSafetyService/fire_safety_service.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/Legionella/legionella.dart';
+import 'package:metro_pat_customer/Views/Mobile_views/check_out_bill.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/pat_test_offer_screen/pat_test_screen.dart';
+import 'package:metro_pat_customer/Views/Mobile_views/product_description.dart';
 
 import '../../Reusable_Widget/drawer_option.dart';
 class DashboardScreen extends StatefulWidget {
@@ -148,6 +150,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         backgroundColor: kgreen
                       ),
                       onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDescription(),));
                         // Handle button press
                       },
                       child: Text('View Detail',style: TextStyle(
