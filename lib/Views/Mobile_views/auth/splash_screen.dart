@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/auth/login.dart';
-import 'package:metro_pat_customer/Views/Mobile_views/dashboard_screen.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 

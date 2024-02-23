@@ -3,10 +3,6 @@ import 'package:metro_pat_customer/Constants/constants.dart';
 import 'package:metro_pat_customer/Constants/size_config.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/EICRTesting/commercial_eicr_testing.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/EICRTesting/landlord_eicr_testing.dart';
-import 'package:metro_pat_customer/Views/Mobile_views/FireRiskAssessments/asbestos_management_surveys.dart';
-import 'package:metro_pat_customer/Views/Mobile_views/FireRiskAssessments/fire_risk_assessments_all_business.dart';
-import 'package:metro_pat_customer/Views/Mobile_views/FireRiskAssessments/fire_risk_assessments_communal_areas.dart';
-import 'package:metro_pat_customer/Views/Mobile_views/FireRiskAssessments/floor_plants.dart';
 class EICRTesting extends StatefulWidget {
   const EICRTesting({super.key});
 

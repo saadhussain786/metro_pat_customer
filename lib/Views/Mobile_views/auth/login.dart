@@ -6,7 +6,6 @@ import 'package:metro_pat_customer/Views/Mobile_views/dashboard_screen.dart';
 
 import '../../../Constants/constants.dart';
 import '../../../Reusable_Widget/custom_button.dart';
-import '../check_out_bill.dart';
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -32,7 +31,7 @@ class _LoginState extends State<Login> {
                   SizedBox(height: SizeConfig.screenHeight*0.03,),
                   CustomTextField(controller: emailController, label: "Enter your email", isHide: false, icon: Icons.alternate_email),
                   SizedBox(height: SizeConfig.screenHeight*0.02,),
-                  CustomTextField(controller: emailController, label: "Enter your password", isHide: true, icon: Icons.alternate_email),
+                  CustomTextField(controller: passwordController, label: "Enter your password", isHide: true, icon: Icons.alternate_email),
                   SizedBox(height: SizeConfig.screenHeight*0.03,),
                   CustomButton(text: 'Login', func: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const DashboardScreen(),));
