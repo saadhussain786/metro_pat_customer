@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:metro_pat_customer/Constants/constants.dart';
 import 'package:metro_pat_customer/Constants/size_config.dart';
+import 'package:metro_pat_customer/Services/category_service.dart';
+import 'package:metro_pat_customer/Services/product_service.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/EICRTesting/eicr_testing.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/Em%20Lights/em_lights.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/FRAAsbestosManagementSurveys/fra_asbestos_management_surveys.dart';
@@ -28,6 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return 1; // For smaller screens, show 1 item in a row
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,117 +57,166 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
             const SizedBox(height: 20,),
-            DrawerOption(
-              lable: 'PAT Testing Offer',
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => PatTestScreen(),));
-              },
-            ),
-            DrawerOption(
-              lable: 'EICR Testing',
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => EICRTesting(),));
+            FutureBuilder(future: CategoryService.fetchCategory(),
+                builder: (context, snapshot) {
+                  if(ConnectionState.waiting==snapshot.connectionState)
+                    {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  if(snapshot.hasError)
+                    {
+                      return const Center(
+                        child: Text('There are some Error',style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 18
+                        ),),
+                      );
+                    }
+                  if(snapshot.hasData)
+                    {
+                      Map data=jsonDecode(snapshot.data);
+                      List category_data=data['data'];
 
-              },
-            ),
-            DrawerOption(
-              lable: 'Em Lights',
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => EmLights(),));
-              },
-            ),
-            DrawerOption(
-              lable: 'Fire Risk Assessments',
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => FireRisk(),));
-              },
-            ),
-            DrawerOption(
-              lable: 'FRA Asbestos Management Surveys',
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => FraAsbestosManagement(),));
-              },
-            ),
-            DrawerOption(
-              lable: 'Fire Safety Service',
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => FireSafetyService(),));
-              },
-            ),
-            DrawerOption(
-              lable: 'Legionella',
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Legionella(),));
-              },
-            ),
 
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: 6,
+                        itemBuilder: (context, index) {
+                          var categoryName=category_data[index]['name'];
+                          String categoryId=category_data[index]['id'];
+
+                          List screens=[
+                            FireSafetyService(id: categoryId,),
+                            const FraAsbestosManagement(),
+                            const FireRisk(),
+                            const EmLights(),
+                            const EICRTesting(),
+                            const PatTestScreen(),
+                            // Legionella(),
+                          ];
+                          return DrawerOption(
+                            lable: categoryName,
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => screens[index],));
+                            },
+                          );
+                        },);
+                    }
+                  return Container();
+                },)
 
           ],
         ),
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final crossAxisCount = _calculateCrossAxisCount(constraints.maxWidth);
-          return GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: crossAxisCount,
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
-              mainAxisExtent: 250
-            ),
-            itemCount: 20,
-            itemBuilder: (BuildContext context, int index) {
-              return Card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Image.asset(
-                      'assets/product_img.jpg',
-                      height: 110,
-                      width: double.infinity,
-                      fit: BoxFit.fill,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'AT Deal 0',
-                            overflow: TextOverflow.ellipsis,
-                            style: headingStyle(),
-                          ),
-                          Text(
-                            '£ 540.00',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 14),
-                          ),
-                          Text('tFrom £0.54 per test, plus VAT',
-                            overflow: TextOverflow.ellipsis,
-                            style: headingStyle(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: kgreen
-                      ),
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDescription(),));
-                        // Handle button press
-                      },
-                      child: Text('View Detail',style: TextStyle(
-                        color: kwhite
-                      ),),
-                    ),
-                  ],
-                ),
-              );
-            },
+      body: FutureBuilder(future: ProductService.FetchProduct(), builder: (context, snapshot) {
+        if(ConnectionState.waiting==snapshot.connectionState)
+        {
+          return const Center(
+            child: CircularProgressIndicator(),
           );
-        },
-      ),
+        }
+        if(snapshot.hasError)
+        {
+          return const Center(
+            child: Text('There are some Error',style: TextStyle(
+                color: Colors.red,
+                fontSize: 18
+            ),),
+          );
+        }
+        if(snapshot.hasData)
+          {
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final crossAxisCount = _calculateCrossAxisCount(constraints.maxWidth);
+                Map products=jsonDecode(snapshot.data);
+                List proudct_data=products['data'];
+                if(proudct_data.isEmpty)
+                  {
+                    return Text('No Data');
+                  }
+                else {
+
+                  return GridView.builder(
+
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        crossAxisSpacing: 8.0,
+                        mainAxisSpacing: 8.0,
+
+                    ),
+                    itemCount: proudct_data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      String productName=proudct_data[index]['name'];
+                      String productDes=proudct_data[index]['description'];
+                      String productPrice=proudct_data[index]['price'];
+                      String productImage=proudct_data[index]['image'];
+                      String productId=proudct_data[index]['id'];
+
+
+                      return Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AspectRatio(
+                              aspectRatio: 16/6,
+                              child: Image.network(
+                                '$productImage',
+                                height: 110,
+                                width: double.infinity,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '$productName',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: headingStyle(),
+                                  ),
+                                  Text(
+                                    '£ $productPrice',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  Text('$productDes',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: headingStyle(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: kgreen
+                              ),
+                              onPressed: () {
+                                print(productId);
+                                Navigator.push(context, MaterialPageRoute(builder: (context) =>  ProductDescription(productId: productId,),));
+                                // Handle button press
+                              },
+                              child: const Text('View Detail',style: TextStyle(
+                                  color: kwhite
+                              ),),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }
+
+              },
+            );
+          }
+        return Container();
+      },),
     );
   }
 }

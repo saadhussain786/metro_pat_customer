@@ -6,8 +6,8 @@ import 'package:metro_pat_customer/Views/Mobile_views/FireSafetyService/fire_ala
 import 'package:metro_pat_customer/Views/Mobile_views/FireSafetyService/fire_alarm_testing_addtional_fault_fixing.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/FireSafetyService/fire_exting_uisher_service.dart';
 class FireSafetyService extends StatefulWidget {
-  const FireSafetyService({super.key});
-
+  String? id;
+  FireSafetyService({super.key,this.id});
   @override
   State<FireSafetyService> createState() => _FireSafetyServiceState();
 }
@@ -41,18 +41,18 @@ class _FireSafetyServiceState extends State<FireSafetyService> with SingleTicker
             ],
           ),
           const SizedBox(height: 15,),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                const EvacuationPlans(),
-                const FireAlarmTesting(),
-                const FireAlarmTestingAddtional(),
-                const FireExtingUisherService(),
+      Expanded(
+        child: TabBarView(
+          controller: _tabController,
+          children: [
+            const EvacuationPlans(),
+            const FireAlarmTesting(),
+            const FireAlarmTestingAddtional(),
+            const FireExtingUisherService(),
 
-              ],
-            ),
-          ),
+          ],
+        )),
+
         ],
       ),
     );
