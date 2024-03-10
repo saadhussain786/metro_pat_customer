@@ -20,6 +20,7 @@ class GetServiceBuCateforyIDController{
 
     if (response.statusCode == 200) {
       var res = await response.stream.bytesToString();
+      return res;
     }
     else {
       debugPrint(response.reasonPhrase);

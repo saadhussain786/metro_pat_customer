@@ -4,16 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:metro_pat_customer/Constants/constants.dart';
 import 'package:metro_pat_customer/Constants/size_config.dart';
 import 'package:metro_pat_customer/Controller/get_categories_controller.dart';
-import 'package:metro_pat_customer/Services/category_service.dart';
 import 'package:metro_pat_customer/Services/product_service.dart';
-import 'package:metro_pat_customer/Views/Mobile_views/EICRTesting/eicr_testing.dart';
-import 'package:metro_pat_customer/Views/Mobile_views/Em%20Lights/em_lights.dart';
-import 'package:metro_pat_customer/Views/Mobile_views/FRAAsbestosManagementSurveys/fra_asbestos_management_surveys.dart';
-import 'package:metro_pat_customer/Views/Mobile_views/FireRiskAssessments/fire_risk_assessments.dart';
-import 'package:metro_pat_customer/Views/Mobile_views/FireSafetyService/fire_safety_service.dart';
-import 'package:metro_pat_customer/Views/Mobile_views/Legionella/legionella.dart';
-import 'package:metro_pat_customer/Views/Mobile_views/pat_test_offer_screen/pat_test_screen.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/product_description.dart';
+import 'package:metro_pat_customer/Views/Mobile_views/service_screen.dart';
 
 import '../../Reusable_Widget/drawer_option.dart';
 class DashboardScreen extends StatefulWidget {
@@ -79,28 +72,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     {
                       Map data=jsonDecode(snapshot.data);
                       List category_data=data['data'];
-
-
+                      debugPrint("$data");
                       return ListView.builder(
                         shrinkWrap: true,
                         itemCount: category_data.length,
                         itemBuilder: (context, index) {
-                          var categoryName=category_data[index]['name'];
-                          String categoryId=category_data[index]['id'];
-
-                          List screens=[
-                            FireSafetyService(id: categoryId,),
-                            const FraAsbestosManagement(),
-                            const FireRisk(),
-                            const EmLights(),
-                            const EICRTesting(),
-                            const PatTestScreen(),
-                            // Legionella(),
-                          ];
+                          String categoryName=category_data[index]["name"];
+                          String categoryId=category_data[index]["id"];
                           return DrawerOption(
                             lable: categoryName,
                             onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => screens[index],));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => ServiceScreen(title: categoryName, categoryID: categoryId),));
                             },
                           );
                         },);

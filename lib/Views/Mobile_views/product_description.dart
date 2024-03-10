@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:metro_pat_customer/Constants/constants.dart';
 import 'package:metro_pat_customer/Constants/size_config.dart';
+import 'package:metro_pat_customer/Controller/get_package_detail_controller.dart';
+import 'package:metro_pat_customer/Model/get_package_detail_model.dart';
 import 'package:metro_pat_customer/Reusable_Widget/custom_button.dart';
-import 'package:metro_pat_customer/Services/product_detail_service.dart';
-import 'package:metro_pat_customer/Services/product_service.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/check_out_bill.dart';
 
 class ProductDescription extends StatefulWidget {
@@ -14,12 +14,10 @@ class ProductDescription extends StatefulWidget {
 
   @override
   State<ProductDescription> createState() =>
-      _ProductDescriptionState(productId);
+      _ProductDescriptionState();
 }
 
 class _ProductDescriptionState extends State<ProductDescription> {
-  String productId;
-  _ProductDescriptionState(this.productId);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,15 +29,15 @@ class _ProductDescriptionState extends State<ProductDescription> {
             physics: const BouncingScrollPhysics(),
 
             child: FutureBuilder(
-              future: DetailService.GetProductDetail(productId:productId),
+              future: GetPackageDetailController.getPackageDetail(GetPackageDetailModel(packageID: widget.productId)),
               builder: (context, snapshot) {
                 if (ConnectionState.waiting == snapshot.connectionState) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
                 if (snapshot.hasError) {
-                  return Center(
+                  return const Center(
                     child: Text(
                       'Error',
                       style: TextStyle(color: Colors.red, fontSize: 18),
@@ -53,7 +51,9 @@ class _ProductDescriptionState extends State<ProductDescription> {
 
                   return ListView.builder(
                     shrinkWrap: true,
-                    itemCount: 1,
+                    scrollDirection: Axis.vertical,
+                    physics: const ScrollPhysics(),
+                    itemCount: serviceData.length,
                     itemBuilder: (context, index) {
                     String serviceName=serviceData[index]['service_name'];
                     String serviceDescription=serviceData[index]['service_description'];
