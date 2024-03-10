@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:metro_pat_customer/Constants/constants.dart';
 import 'package:metro_pat_customer/Constants/size_config.dart';
+import 'package:metro_pat_customer/Controller/get_categories_controller.dart';
 import 'package:metro_pat_customer/Services/category_service.dart';
 import 'package:metro_pat_customer/Services/product_service.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/EICRTesting/eicr_testing.dart';
@@ -57,7 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
             const SizedBox(height: 20,),
-            FutureBuilder(future: CategoryService.fetchCategory(),
+            FutureBuilder(future: GetCategoryController.getCategory(),
                 builder: (context, snapshot) {
                   if(ConnectionState.waiting==snapshot.connectionState)
                     {
@@ -82,7 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                       return ListView.builder(
                         shrinkWrap: true,
-                        itemCount: 6,
+                        itemCount: category_data.length,
                         itemBuilder: (context, index) {
                           var categoryName=category_data[index]['name'];
                           String categoryId=category_data[index]['id'];
