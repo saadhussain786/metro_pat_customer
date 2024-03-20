@@ -9,6 +9,8 @@ import 'package:metro_pat_customer/Model/get_service_by_category_id_model.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/product_description.dart';
 
 import '../../Constants/constants.dart';
+import '../../Controller/get_package_controller.dart';
+import '../../Model/get_package_model.dart';
 
 class ServiceScreen extends StatefulWidget {
   const ServiceScreen({super.key, required this.title, required this.categoryID});
@@ -103,11 +105,12 @@ class _ServiceScreenState extends State<ServiceScreen> {
             LayoutBuilder(
               builder: (context, constraints) {
                 return FutureBuilder(
-                    future: GetPackageDetailController.getPackageDetail(GetPackageDetailModel(packageID: defaultPackage.toString())),
+                    future: GetPackageController.getPackage(GetPackageModel(serviceID: defaultPackage.toString())),
                     builder: (BuildContext context,  snapshot) {
                       if (snapshot.hasData) {
                         Map map = jsonDecode(snapshot.data);
                         List getPackages = map["data"];
+                        debugPrint("Package Length: ${getPackages.length}");
                         int packageFound = map["total_records"];
                         final crossAxisCount = _calculateCrossAxisCount(constraints.maxWidth);
                         return packageFound != 0 ? GridView.builder(
@@ -115,43 +118,39 @@ class _ServiceScreenState extends State<ServiceScreen> {
                               crossAxisCount: crossAxisCount,
                               crossAxisSpacing: 8.0,
                               mainAxisSpacing: 8.0,
-                              mainAxisExtent: 250
+                              mainAxisExtent: 300
                           ),
                           itemCount: getPackages.length,
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
+                          physics: const ScrollPhysics(),
                           itemBuilder: (BuildContext context, int index) {
-                            return Card(
+                            return Container(
+                              height: 240,
+                              width: double.infinity,
+                              margin: const EdgeInsets.symmetric(horizontal: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Image.network(
-                                    "${getPackages[index]["image"]}",
-                                    height: 110,
+                                    "http://patcrm.codetech.pk${getPackages[index]["image"]}",
+                                    height: 160,
                                     width: double.infinity,
                                     fit: BoxFit.fill,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${getPackages[index]["name"]}",
-                                          overflow: TextOverflow.ellipsis,
-                                          style: headingStyle(),
-                                        ),
-                                        Text(
-                                          '£ ${getPackages[index]["price"]}',
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(fontSize: 14),
-                                        ),
-                                        Text("${getPackages[index]["description"]}",
-                                          overflow: TextOverflow.ellipsis,
-                                          style: headingStyle(),
-                                        ),
-                                      ],
-                                    ),
+                                  Text(
+                                    "${getPackages[index]["name"]}",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: headingStyle(),
+                                  ),
+                                  Text(
+                                    '£ ${getPackages[index]["price"]}',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                  Text("${getPackages[index]["description"]}",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: headingStyle(),
                                   ),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(

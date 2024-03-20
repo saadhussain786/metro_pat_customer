@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:metro_pat_customer/Constants/size_config.dart';
+import 'package:metro_pat_customer/Controller/login_controller.dart';
+import 'package:metro_pat_customer/Model/login_model.dart';
 import 'package:metro_pat_customer/Reusable_Widget/custom_text_field.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/auth/register.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/dashboard_screen.dart';
@@ -34,7 +36,10 @@ class _LoginState extends State<Login> {
                   CustomTextField(controller: passwordController, label: "Enter your password", isHide: true, icon: Icons.alternate_email),
                   SizedBox(height: SizeConfig.screenHeight*0.03,),
                   CustomButton(text: 'Login', func: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const DashboardScreen(),));
+                    LoginController.userLogin(UserLog(
+                      username: emailController.text,
+                      userPassword: passwordController.text,
+                    ), context);
                   }, bg: kgreen),
                   SizedBox(height: SizeConfig.screenHeight*0.02,),
                   TextButton(onPressed: (){

@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:metro_pat_customer/Views/Mobile_views/auth/login.dart';
+import 'package:metro_pat_customer/Views/Mobile_views/dashboard_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -10,13 +12,34 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
+  void splash() async {
+    SharedPreferences userCred = await SharedPreferences.getInstance();
+    var getUser = userCred.getString("uID");
+    if (getUser != null) {
+
+      if (context.mounted) {
+        Timer(const Duration(seconds: 3), () {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+            return const DashboardScreen();
+          }));
+        });
+      }
+    } else {
+      if (context.mounted) {
+        Timer(const Duration(seconds: 3), () {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+            return const Login();
+          }));
+        });
+      }
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
-    Timer(
-      const Duration(seconds: 3),
-        ()=>Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Login(),))
-    );
+    splash();
     super.initState();
   }
   @override

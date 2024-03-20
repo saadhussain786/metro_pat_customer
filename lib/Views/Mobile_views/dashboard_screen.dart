@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:metro_pat_customer/Constants/constants.dart';
@@ -62,8 +63,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   if(snapshot.hasError)
                     {
                       return const Center(
-                        child: Text('There are some Error',style: TextStyle(
-                          color: Colors.red,
+                        child: Text('Something went Wrong',style: TextStyle(
+                          color: Colors.green,
                           fontSize: 18
                         ),),
                       );
@@ -103,7 +104,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         if(snapshot.hasError)
         {
           return const Center(
-            child: Text('There are some Error',style: TextStyle(
+            child: Text('Something went Wrong',style: TextStyle(
                 color: Colors.red,
                 fontSize: 18
             ),),
@@ -118,7 +119,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 List proudct_data=products['data'];
                 if(proudct_data.isEmpty)
                   {
-                    return Text('No Data');
+                    return Text('Nothing to Show');
                   }
                 else {
 
@@ -139,6 +140,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       String productImage=proudct_data[index]['image'];
                       String productId=proudct_data[index]['id'];
 
+                      debugPrint(" this is pic: $productImage");
 
                       return Card(
                         child: Column(
@@ -147,7 +149,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             AspectRatio(
                               aspectRatio: 16/6,
                               child: Image.network(
-                                '$productImage',
+                                "http://patcrm.codetech.pk$productImage",
                                 height: 110,
                                 width: double.infinity,
                                 fit: BoxFit.fill,
